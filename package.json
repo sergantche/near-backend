@@ -1,0 +1,14 @@
+{
+  "name": "near-backed",
+  "version": "1.0.0",
+  "description": "Implementation of a server calling near smart contract",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SergantChe",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
