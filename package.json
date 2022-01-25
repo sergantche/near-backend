@@ -1,14 +1,19 @@
 {
-  "name": "near-backed",
+  "name": "near-backend",
   "version": "1.0.0",
   "description": "Implementation of a server calling near smart contract",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "build:contract": "node contract/compile.js",
+    "build:contract:debug": "node contract/compile.js --debug",
+    "dev:deploy:contract": "near dev-deploy && env-cmd -f ./neardev/dev-account.env node scripts/init.js",
+    "deploy:contract": "near deploy"
   },
   "author": "SergantChe",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "shelljs": "^0.8.5"
   }
 }
