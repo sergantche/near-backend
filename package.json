@@ -13,6 +13,7 @@
   "author": "SergantChe",
   "license": "ISC",
   "dependencies": {
+    "env-cmd": "^10.1.0",
     "express": "^4.17.2",
     "shelljs": "^0.8.5"
   }
