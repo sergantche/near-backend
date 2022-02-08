@@ -11,8 +11,9 @@ use near_sdk::{
 };
 use near_sdk::collections::{ UnorderedMap, LazyOption, LookupMap};
 use near_sdk::json_types::Base64VecU8;
+use near_sdk::serde_json::json;
 
-pub use constants::{BASE_URI, DATA_IMAGE_SVG_NEAR_ICON, ONE_NEAR};
+pub use constants::{BASE_URI, DATA_IMAGE_SVG_NEAR_ICON, ONE_NEAR, ONE_YOCTO, SINGLE_CALL_GAS};
 
 #[derive(BorshSerialize, BorshStorageKey)]
 enum StorageKey {
@@ -91,16 +92,20 @@ impl Contract {
         //
     }
 
+    #[payable]
     pub fn craft_new_hero(&mut self) -> TokenId {
+        //log!("step 1");
         let timestamp: u64 = env::block_timestamp();
         let rand: u8 = *env::random_seed().get(0).unwrap();
         let token_id: String = format!("HERO:{}:{}", rand, timestamp);
+        log!("token id: {}", token_id.clone());
 
         let contract_id = env::current_account_id();
         let root_id = AccountId::try_from(contract_id).unwrap();
 
         let media_url: String = format!("{}.png", token_id.clone());
         let media_hash = Base64VecU8(env::sha256(media_url.as_bytes()));
+        log!("media url: {}", media_url.clone());
 
         // Default to common token
         let mut token_metadata = TokenMetadata {
@@ -117,9 +122,29 @@ impl Contract {
             reference: None,
             reference_hash: None,
         };
+        //log!("step 2");
 
         // Mint NFT   
         self.nft_mint(token_id.clone(), root_id.clone(), token_metadata.clone());
+
+        // Transfer NFT to new owner
+        // log!("username: {}", username.clone());
+        // let receiver_id = AccountId::try_from(username).unwrap();
+        // log!("receiver id: {}", receiver_id.clone());
+        // log!("token_id: {}", token_id.clone());
+        // env::promise_create(
+        //     root_id,
+        //     "nft_transfer",
+        //     json!({
+        //         "token_id": token_id.clone(),
+        //         "receiver_id": receiver_id,
+        //     })
+        //     .to_string()
+        //     .as_bytes(),
+        //     ONE_YOCTO,
+        //     SINGLE_CALL_GAS,
+        // );
+        // log!("Success! NFT transfering for {}! Token ID = {}", receiver_id.clone(), token_id.clone());
         token_id.clone()
     }
 

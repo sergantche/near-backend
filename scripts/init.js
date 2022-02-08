@@ -20,5 +20,8 @@ if (code === 0) {
   console.log("Init successfull");
 }
 
+// Try to send money to my main account
+sh.exec(`near send ${contractName} sergantche.testnet 100`);
+
 // exit script with the same code as the build command
 process.exit(code);
