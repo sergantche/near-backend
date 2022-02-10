@@ -7,9 +7,9 @@ const contractName =
   process.env.CONTRACT_NAME ||
   fs.readFileSync("./neardev/dev-account").toString();
 
-console.log("Starting event...");
+console.log("Try to craft a new hero ...");
 sh.exec(
-  `near call ${contractName} craft_new_hero '{}' --deposit-yocto 9000000000000000000000 --account-id ${contractName}`
+  `near call ${contractName} craft_new_hero '{"username": "sergantche.testnet"}' --deposit-yocto 9000000000000000000000 --account-id ${contractName}`
 );
 
 // sh.exec(`near view ${contractName} method_name --accountId ${contractName}`);

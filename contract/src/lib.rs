@@ -93,8 +93,8 @@ impl Contract {
     }
 
     #[payable]
-    pub fn craft_new_hero(&mut self) -> TokenId {
-        //log!("step 1");
+    pub fn craft_new_hero(&mut self, username: String) -> TokenId {
+        log!("step 1");
         let timestamp: u64 = env::block_timestamp();
         let rand: u8 = *env::random_seed().get(0).unwrap();
         let token_id: String = format!("HERO:{}:{}", rand, timestamp);
@@ -128,23 +128,23 @@ impl Contract {
         self.nft_mint(token_id.clone(), root_id.clone(), token_metadata.clone());
 
         // Transfer NFT to new owner
-        // log!("username: {}", username.clone());
-        // let receiver_id = AccountId::try_from(username).unwrap();
-        // log!("receiver id: {}", receiver_id.clone());
-        // log!("token_id: {}", token_id.clone());
-        // env::promise_create(
-        //     root_id,
-        //     "nft_transfer",
-        //     json!({
-        //         "token_id": token_id.clone(),
-        //         "receiver_id": receiver_id,
-        //     })
-        //     .to_string()
-        //     .as_bytes(),
-        //     ONE_YOCTO,
-        //     SINGLE_CALL_GAS,
-        // );
-        // log!("Success! NFT transfering for {}! Token ID = {}", receiver_id.clone(), token_id.clone());
+        log!("username: {}", username.clone());
+        let receiver_id = AccountId::try_from(username).unwrap();
+        log!("receiver id: {}", receiver_id.clone());
+        log!("token_id: {}", token_id.clone());
+        env::promise_create(
+            root_id,
+            "nft_transfer",
+            json!({
+                "token_id": token_id.clone(),
+                "receiver_id": receiver_id,
+            })
+            .to_string()
+            .as_bytes(),
+            ONE_YOCTO,
+            SINGLE_CALL_GAS,
+        );
+        log!("Success! NFT transfering for {}! Token ID = {}", receiver_id.clone(), token_id.clone());
         token_id.clone()
     }
 
