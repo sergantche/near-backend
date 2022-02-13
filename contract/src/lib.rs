@@ -94,7 +94,6 @@ impl Contract {
 
     #[payable]
     pub fn craft_new_hero(&mut self, username: String) -> TokenId {
-        log!("step 1");
         let timestamp: u64 = env::block_timestamp();
         let rand: u8 = *env::random_seed().get(0).unwrap();
         let token_id: String = format!("HERO:{}:{}", rand, timestamp);

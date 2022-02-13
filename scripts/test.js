@@ -9,7 +9,7 @@ const contractName =
 
 console.log("Try to craft a new hero ...");
 sh.exec(
-  `near call ${contractName} craft_new_hero '{"username": "sergantche.testnet"}' --deposit-yocto 9000000000000000000000 --account-id ${contractName}`
+  `near call ${contractName} craft_new_hero '{"username": "sergantche.testnet"}' --deposit-yocto 9000000000000000000000 --account-id ${contractName} --gas 300000000000000`
 );
 
 // sh.exec(`near view ${contractName} method_name --accountId ${contractName}`);
