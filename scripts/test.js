@@ -9,10 +9,17 @@ const contractName =
 
 console.log("Try to craft a new hero ...");
 sh.exec(
+  `near view ${contractName} nft_supply_for_owner '{"account_id": "sergantche.testnet"}'`
+);
+sh.exec(
   `near call ${contractName} craft_new_hero '{"username": "sergantche.testnet"}' --deposit-yocto 9000000000000000000000 --account-id ${contractName} --gas 300000000000000`
 );
-
-// sh.exec(`near view ${contractName} method_name --accountId ${contractName}`);
+sh.exec(
+  `near view ${contractName} nft_supply_for_owner '{"account_id": "sergantche.testnet"}'`
+);
+sh.exec(
+  `near view ${contractName} nft_tokens_for_owner '{"account_id": "sergantche.testnet"}'`
+);
 
 // exit script with the same code as the build command
 process.exit();

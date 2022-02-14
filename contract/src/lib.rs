@@ -121,7 +121,6 @@ impl Contract {
             reference: None,
             reference_hash: None,
         };
-        //log!("step 2");
 
         // Mint NFT   
         self.nft_mint(token_id.clone(), root_id.clone(), token_metadata.clone());
