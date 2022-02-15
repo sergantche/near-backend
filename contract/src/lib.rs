@@ -9,6 +9,7 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::{
     env, log, near_bindgen, PanicOnDefault, AccountId, BorshStorageKey, Promise, PromiseResult, PromiseOrValue
 };
+use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::collections::{ UnorderedMap, LazyOption, LookupMap};
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::serde_json::json;
@@ -20,11 +21,22 @@ enum StorageKey {
     Stars,
     Experience,
     MaximumLevel,
+    Rarity,
     NonFungibleToken,
     Metadata,
     TokenMetadata,
     Enumeration,
     Approval,
+}
+
+// Token rarity
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
+#[serde(crate = "near_sdk::serde")]
+pub enum Rarity {
+    Common,
+    Rare,
+    Epic,
+    Ssr
 }
 
 #[near_bindgen]
@@ -37,6 +49,7 @@ pub struct Contract {
     stars: LookupMap<TokenId, u64>,
     experience: LookupMap<TokenId, u64>,
     maximum_level: LookupMap<TokenId, u64>,
+    rarity: LookupMap<TokenId, Rarity>,
 }
 
 #[near_bindgen]
@@ -72,6 +85,7 @@ impl Contract {
             stars: LookupMap::new(StorageKey::Stars),
             experience: LookupMap::new(StorageKey::Experience),
             maximum_level: LookupMap::new(StorageKey::MaximumLevel),
+            rarity: LookupMap::new(StorageKey::Rarity),
         }                
     }
 
@@ -88,10 +102,19 @@ impl Contract {
         return rand;
     }
 
-    pub fn update_hero_stats(&mut self) {
-        //
+    // Update hero statistics
+    pub fn update_hero_stats(&mut self, token_id: TokenId , new_stars: u64, new_experience: u64, new_maximum_level: u64) {
+        self.stars.insert(&token_id, &new_stars);
+        self.experience.insert(&token_id, &new_experience);
+        self.maximum_level.insert(&token_id, &new_maximum_level);
     }
 
+    // Get statistics of a hero
+    pub fn get_stats(&self, token_id: TokenId) -> (Option<u64>, Option<u64>, Option<u64>, Option<Rarity>) {
+        (self.stars.get(&token_id), self.experience.get(&token_id), self.maximum_level.get(&token_id), self.rarity.get(&token_id))
+    }
+
+    // Mint nft ans send them to `username` account
     #[payable]
     pub fn craft_new_hero(&mut self, username: String) -> TokenId {
         let timestamp: u64 = env::block_timestamp();
@@ -143,7 +166,22 @@ impl Contract {
             SINGLE_CALL_GAS,
         );
         log!("Success! NFT transfering for {}! Token ID = {}", receiver_id.clone(), token_id.clone());
-        token_id.clone()
+
+        // Init token stats
+        self.stars.insert(&token_id, &0);
+        self.experience.insert(&token_id, &0);
+        self.maximum_level.insert(&token_id, &0);
+
+        // Choose and set rarity
+        let rarity = match rand {
+            0..=200 => Rarity::Common,
+            201..=240 => Rarity::Rare,
+            241..=250 => Rarity::Epic,
+            251..=255 => Rarity::Ssr,
+        };
+        self.rarity.insert(&token_id, &rarity);
+
+        token_id
     }
 
     // Mint a new token with ID=token_id belonging to receiver_id.
