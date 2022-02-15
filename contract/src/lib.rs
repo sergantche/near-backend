@@ -7,10 +7,10 @@ use near_contract_standards::non_fungible_token::metadata::{
 
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::{
-    env, log, near_bindgen, PanicOnDefault, AccountId, BorshStorageKey, Promise, PromiseResult, PromiseOrValue
+    env, log, near_bindgen, PanicOnDefault, AccountId, BorshStorageKey, Promise, PromiseOrValue
 };
 use near_sdk::serde::{Deserialize, Serialize};
-use near_sdk::collections::{ UnorderedMap, LazyOption, LookupMap};
+use near_sdk::collections::{ LazyOption, LookupMap};
 use near_sdk::json_types::Base64VecU8;
 use near_sdk::serde_json::json;
 
@@ -63,8 +63,8 @@ impl Contract {
 
         let metadata = NFTContractMetadata {
             spec: NFT_METADATA_SPEC.to_string(),
-            name: "vSelf NEAR NFT checkins".to_string(),
-            symbol: "VSLF".to_string(),
+            name: "Murkwood Tale's hero NFT".to_string(),
+            symbol: "CRTHR".to_string(),
             icon: Some(DATA_IMAGE_SVG_NEAR_ICON.to_string()),
             base_uri: Some(BASE_URI.to_string()),
             reference: None,
@@ -89,16 +89,15 @@ impl Contract {
         }                
     }
 
+    // We don't use this method in current version
     #[payable]
     pub fn play(&mut self) -> u8 {
-        let account_id = env::signer_account_id();
+        //let account_id = env::signer_account_id();
         let deposit = env::attached_deposit();
-        
         assert!((deposit > ONE_NEAR), "not enough currency to play");
         
-        // Toss the dice (minimal logic for now)
+        // Toss the dice
         let rand: u8 = *env::random_seed().get(0).unwrap();
-
         return rand;
     }
 
@@ -124,13 +123,12 @@ impl Contract {
 
         let contract_id = env::current_account_id();
         let root_id = AccountId::try_from(contract_id).unwrap();
-
         let media_url: String = format!("{}.png", token_id.clone());
         let media_hash = Base64VecU8(env::sha256(media_url.as_bytes()));
         log!("media url: {}", media_url.clone());
 
         // Default to common token
-        let mut token_metadata = TokenMetadata {
+        let token_metadata = TokenMetadata {
             title: Some("Common".to_string()),
             description: Some("NFT hero token".to_string()),
             media: Some(media_url),
@@ -174,10 +172,10 @@ impl Contract {
 
         // Choose and set rarity
         let rarity = match rand {
-            0..=200 => Rarity::Common,
-            201..=240 => Rarity::Rare,
-            241..=250 => Rarity::Epic,
-            251..=255 => Rarity::Ssr,
+            0..=214 => Rarity::Common,
+            215..=240 => Rarity::Rare,
+            241..=253 => Rarity::Epic,
+            254..=255 => Rarity::Ssr,
         };
         self.rarity.insert(&token_id, &rarity);
 
