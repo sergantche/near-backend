@@ -9,6 +9,7 @@ out
 
 #keys
 /neardev
+/creds
 
 # misc
 .DS_Store

@@ -9,8 +9,7 @@
     "dev:deploy": "near dev-deploy contract/target/wasm32-unknown-unknown/release/near_backend.wasm && env-cmd -f ./neardev/dev-account.env node scripts/init.js",
     "dev:build:deploy": "npm run build && rm -rf neardev && near dev-deploy contract/target/wasm32-unknown-unknown/release/near_backend.wasm && env-cmd -f ./neardev/dev-account.env node scripts/init.js",
     "test": "env-cmd -f ./neardev/dev-account.env node scripts/test.js",
-    "deploy": "./scripts/deploy.testnet.sh",
-    "deploy:default": "near deploy"
+    "deploy": "./scripts/deploy.testnet.sh"
   },
   "author": "SergantChe",
   "license": "ISC",
