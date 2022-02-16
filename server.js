@@ -62,9 +62,31 @@ contractAccount.addAccessKey = (publicKey) =>
 const contract = new Contract(contractAccount, contractName, contractMethods);
 
 ///   API   ///
-
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello from Murkwood Tale's contract server!");
+});
+
+// Balance of a single player or list of NFT rewards
+app.get("/craft-hero", async (req, res) => {
+  let result = "None";
+  // const username = req.query.nearid.slice(1, -1);
+  // const request = req.query.qr.slice(1, -1);
+  // const gas_cost = 300000000000000;
+  // const minting_cost = "100000000000000000000000";
+  // console.log("Incoming action: {} {}", username, request);
+
+  // result = await contract
+  //   .checkin({
+  //     args: { username, request },
+  //     gas: gas_cost,
+  //     amount: minting_cost,
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //     res.status(200).send();
+  //   });
+  // console.log(result);
+  res.json(result);
 });
 
 app.listen(port, () => {
