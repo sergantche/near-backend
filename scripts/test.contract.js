@@ -15,7 +15,7 @@ const main = async () => {
     fs.readFileSync("./neardev/dev-account").toString();
 
   // Get token supply
-  console.log("Get total token supply and for sergantche.testnet ...");
+  console.log("Get total token supply for sergantche.testnet ...");
   sh.exec(`near view ${contractName} nft_total_supply`);
   sh.exec(
     `near view ${contractName} nft_supply_for_owner '{"account_id": "sergantche.testnet"}'`

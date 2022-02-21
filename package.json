@@ -11,7 +11,8 @@
     "dev:deploy": "rm -rf neardev && near dev-deploy contract/target/wasm32-unknown-unknown/release/near_backend.wasm && env-cmd -f ./neardev/dev-account.env node scripts/init.js",
     "dev:build:deploy": "npm run build && rm -rf neardev && near dev-deploy contract/target/wasm32-unknown-unknown/release/near_backend.wasm && env-cmd -f ./neardev/dev-account.env node scripts/init.js",
     "test": "env-cmd -f ./neardev/dev-account.env node scripts/test.contract.js",
-    "deploy:contract": "./deploy.sh",
+    "testnet:test": "env-cmd -f ./config/testnet-account.env node scripts/test.contract.js",
+    "deploy:contract": "./scripts/deploy.sh",
     "deploy:hosting": "firebase deploy",
     "deploy:server": "gcloud builds submit --tag gcr.io/heroes-dev-2e691/heroes-api-service &&  gcloud run deploy --image gcr.io/heroes-dev-2e691/heroes-api-service"
   },

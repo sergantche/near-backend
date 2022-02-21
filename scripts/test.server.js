@@ -5,4 +5,4 @@
 const sh = require("shelljs");
 
 sh.exec(`curl "http://localhost:8080/"`);
-sh.exec(`curl "http://localhost:8080/craft-hero?nearid='ilerik.testnet'"`);
+sh.exec(`curl "http://localhost:8080/api/craft-hero?nearid='ilerik.testnet'"`);
