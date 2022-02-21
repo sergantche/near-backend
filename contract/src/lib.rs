@@ -39,6 +39,15 @@ pub enum Rarity {
     Ssr
 }
 
+// Hero data
+pub struct HeroData {
+    name: String,
+    media_url: String,
+    power: u64,
+    health: u64,
+    rarity: Rarity, 
+}
+
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
@@ -121,16 +130,64 @@ impl Contract {
         let token_id: String = format!("HERO:{}:{}", rand, timestamp);
         log!("token id: {}", token_id.clone());
 
+        // Choose rarity
+        let rarity = match rand {
+            0..=214 => Rarity::Common,
+            215..=240 => Rarity::Rare,
+            241..=253 => Rarity::Epic,
+            254..=255 => Rarity::Ssr,
+        };
+
+        // Define hero
+        let hero_data = match rarity {
+            Rarity::Common => {
+                HeroData {
+                    name: String::from("Krong"),
+                    media_url: String::from("UndeadArcherDD"),
+                    power: 20,
+                    health: 50,
+                    rarity: rarity,
+                }
+            },
+            Rarity::Rare => {
+                HeroData {
+                    name: String::from("Helga"),
+                    media_url: String::from("UndeadHeal"),
+                    power: 20,
+                    health: 50,
+                    rarity: rarity,
+                }
+            },
+            Rarity::Epic => {
+                HeroData {
+                    name: String::from("Unknown"),
+                    media_url: String::from("UndeadMeleeDD"),
+                    power: 20,
+                    health: 5000,
+                    rarity: rarity,
+                }
+            },
+            Rarity::Ssr => {
+                HeroData {
+                    name: String::from("Dead King"),
+                    media_url: String::from("UndeadTank"),
+                    power: 20,
+                    health: 5000,
+                    rarity: rarity,
+                }
+            }
+        };
+
         let contract_id = env::current_account_id();
         let root_id = AccountId::try_from(contract_id).unwrap();
-        let media_url: String = format!("{}.png", token_id.clone());
+        let media_url: String = format!("{}.png", &hero_data.media_url);
         let media_hash = Base64VecU8(env::sha256(media_url.as_bytes()));
         log!("media url: {}", media_url.clone());
 
         // Default to common token
         let token_metadata = TokenMetadata {
-            title: Some("Common".to_string()),
-            description: Some("NFT hero token".to_string()),
+            title: Some(hero_data.name),
+            description: Some(format!("{}/{}", &hero_data.power, &hero_data.health)),
             media: Some(media_url),
             media_hash: Some(media_hash),
             copies: Some(1u64),
@@ -169,15 +226,7 @@ impl Contract {
         self.stars.insert(&token_id, &0);
         self.experience.insert(&token_id, &0);
         self.maximum_level.insert(&token_id, &0);
-
-        // Choose and set rarity
-        let rarity = match rand {
-            0..=214 => Rarity::Common,
-            215..=240 => Rarity::Rare,
-            241..=253 => Rarity::Epic,
-            254..=255 => Rarity::Ssr,
-        };
-        self.rarity.insert(&token_id, &rarity);
+        self.rarity.insert(&token_id, &hero_data.rarity);
 
         token_id
     }
