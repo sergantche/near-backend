@@ -125,12 +125,8 @@ impl Contract {
     // Mint nft ans send them to `username` account
     #[payable]
     pub fn craft_new_hero(&mut self, username: String) -> TokenId {
-        let timestamp: u64 = env::block_timestamp();
-        let rand: u8 = *env::random_seed().get(0).unwrap();
-        let token_id: String = format!("HERO:{}:{}", rand, timestamp);
-        log!("token id: {}", token_id.clone());
-
         // Choose rarity
+        let rand: u8 = *env::random_seed().get(0).unwrap();
         let rarity = match rand {
             0..=214 => Rarity::Common,
             215..=240 => Rarity::Rare,
@@ -138,45 +134,194 @@ impl Contract {
             254..=255 => Rarity::Ssr,
         };
 
+        let rand: u8 = *env::random_seed().get(1).unwrap();
+
         // Define hero
         let hero_data = match rarity {
             Rarity::Common => {
-                HeroData {
-                    name: String::from("Krong"),
-                    media_url: String::from("UndeadArcherDD"),
-                    power: 20,
-                    health: 50,
-                    rarity: rarity,
+                match rand {
+                    0..=41 => HeroData {
+                        name: String::from("Krong"),
+                        media_url: String::from("UndeadArcherDD"),
+                        power: 20,
+                        health: 50,
+                        rarity: rarity,
+                    },
+                    42..=83 => HeroData {
+                        name: String::from("Freya"),
+                        media_url: String::from("DemonRangeDD"),
+                        power: 75,
+                        health: 440,
+                        rarity: rarity,
+                    },
+                    84..=125 => HeroData {
+                        name: String::from("Morg"),
+                        media_url: String::from("DemonTank"),
+                        power: 50,
+                        health: 1000,
+                        rarity: rarity,
+                    },
+                    126..=168 => HeroData {
+                        name: String::from("Slay"),
+                        media_url: String::from("HumanMeleeDD"),
+                        power: 10,
+                        health: 400,
+                        rarity: rarity,
+                    },
+                    169..=211 => HeroData {
+                        name: String::from("Warg"),
+                        media_url: String::from("Warg"),
+                        power: 54,
+                        health: 1200,
+                        rarity: rarity,
+                    },
+                    _ => HeroData {
+                        name: String::from("White Wolf"),
+                        media_url: String::from("WhiteWolf"),
+                        power: 50,
+                        health: 1400,
+                        rarity: rarity,
+                    },
                 }
             },
             Rarity::Rare => {
-                HeroData {
-                    name: String::from("Helga"),
-                    media_url: String::from("UndeadHeal"),
-                    power: 20,
-                    health: 50,
-                    rarity: rarity,
+                match rand {
+                    0..=31 => HeroData {
+                        name: String::from("Helga"),
+                        media_url: String::from("UndeadHeal"),
+                        power: 20,
+                        health: 50,
+                        rarity: rarity,
+                    },
+                    32..=63 => HeroData {
+                        name: String::from("Chi-chi"),
+                        media_url: String::from("UndeadSpecialist"),
+                        power: 10,
+                        health: 50,
+                        rarity: rarity,
+                    },
+                    64..=95 => HeroData {
+                        name: String::from("Drakara"),
+                        media_url: String::from("DemonHeal"),
+                        power: 100,
+                        health: 500,
+                        rarity: rarity,
+                    },
+                    96..=127 => HeroData {
+                        name: String::from("Hardy"),
+                        media_url: String::from("DemonMeleeDD"),
+                        power: 90,
+                        health: 630,
+                        rarity: rarity,
+                    },
+                    128..=159 => HeroData {
+                        name: String::from("Bronks"),
+                        media_url: String::from("HumanTank"),
+                        power: 10,
+                        health: 400,
+                        rarity: rarity,
+                    },
+                    160..=191 => HeroData {
+                        name: String::from("Timina"),
+                        media_url: String::from("HumanSpecialist"),
+                        power: 10,
+                        health: 400,
+                        rarity: rarity,
+                    },
+                    192..=223=> HeroData {
+                        name: String::from("Gray wolf"),
+                        media_url: String::from("NeutralWolf1"),
+                        power: 75,
+                        health: 670,
+                        rarity: rarity,
+                    },
+                    _ => HeroData {
+                        name: String::from("Porcupine"),
+                        media_url: String::from("Porcupine"),
+                        power: 45,
+                        health: 485,
+                        rarity: rarity,
+                    },
                 }
             },
             Rarity::Epic => {
-                HeroData {
-                    name: String::from("Unknown"),
-                    media_url: String::from("UndeadMeleeDD"),
-                    power: 20,
-                    health: 5000,
-                    rarity: rarity,
+                match rand {
+                    0..=84 => HeroData {
+                        name: String::from("Unknown"),
+                        media_url: String::from("UndeadMeleeDD"),
+                        power: 20,
+                        health: 5000,
+                        rarity: rarity,
+                    },
+                    85..=169 => HeroData {
+                        name: String::from("Berenika"),
+                        media_url: String::from("HumanHeal"),
+                        power: 10,
+                        health: 400,
+                        rarity: rarity,
+                    },
+                    _ => HeroData {
+                        name: String::from("Black Bear"),
+                        media_url: String::from("BlackBear"),
+                        power: 55,
+                        health: 1050,
+                        rarity: rarity,
+                    },
                 }
             },
             Rarity::Ssr => {
-                HeroData {
-                    name: String::from("Dead King"),
-                    media_url: String::from("UndeadTank"),
-                    power: 20,
-                    health: 5000,
-                    rarity: rarity,
+                match rand {
+                    0..=41 => HeroData {
+                        name: String::from("Dead King"),
+                        media_url: String::from("UndeadTank"),
+                        power: 20,
+                        health: 5000,
+                        rarity: rarity,
+                    },
+                    42..=83 => HeroData {
+                        name: String::from("Luciy"),
+                        media_url: String::from("DemonSpecialist"),
+                        power: 117,
+                        health: 500,
+                        rarity: rarity,
+                    },
+                    84..=125 => HeroData {
+                        name: String::from("Iona"),
+                        media_url: String::from("HumanRangeDD"),
+                        power: 10,
+                        health: 400,
+                        rarity: rarity,
+                    },
+                    126..=168 => HeroData {
+                        name: String::from("Troll"),
+                        media_url: String::from("NeutralTroll"),
+                        power: 50,
+                        health: 1600,
+                        rarity: rarity,
+                    },
+                    169..=211 => HeroData {
+                        name: String::from("Wolf Whelp"),
+                        media_url: String::from("WolfWhelp"),
+                        power: 50,
+                        health: 300,
+                        rarity: rarity,
+                    },
+                    _ => HeroData {
+                        name: String::from("Red Dragon"),
+                        media_url: String::from("DragonBoss"),
+                        power: 20,
+                        health: 5000,
+                        rarity: rarity,
+                    },
                 }
-            }
+            },
         };
+
+        // Generate token_id
+        let timestamp: u64 = env::block_timestamp();
+        let rand: u8 = *env::random_seed().get(2).unwrap();
+        let token_id: String = format!("{}:{}:{}", &hero_data.media_url, rand, timestamp);
+        log!("token id: {}", token_id.clone());
 
         let contract_id = env::current_account_id();
         let root_id = AccountId::try_from(contract_id).unwrap();
@@ -186,7 +331,7 @@ impl Contract {
 
         // Default to common token
         let token_metadata = TokenMetadata {
-            title: Some(hero_data.name),
+            title: Some(format!("{} {}/{}", &hero_data.name, &hero_data.power, &hero_data.health)),
             description: Some(format!("{}/{}", &hero_data.power, &hero_data.health)),
             media: Some(media_url),
             media_hash: Some(media_hash),
