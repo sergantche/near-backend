@@ -57,12 +57,12 @@ contractAccount.addAccessKey = (publicKey) =>
 const contract = new Contract(contractAccount, contractName, contractMethods);
 
 ///   API   ///
-app.get("/", (req, res) => {
+app.get("/api/", (req, res) => {
   res.send("Hello from Murkwood Tale's contract server!");
 });
 
 // Balance of a single player or list of NFT rewards
-app.get("/craft-hero", async (req, res) => {
+app.get("/api/craft-hero", async (req, res) => {
   let result = "None";
   const username = req.query.nearid.slice(1, -1);  
   const gas_cost = 300000000000000;
