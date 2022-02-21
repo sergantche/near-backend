@@ -1,15 +1,16 @@
 #!/bin/bash
 set -e
 
-ID=heroes_v1.sergantche.testnet
+CONTRACT=heroes_v1.sergantche.testnet
+MASTER_ACCOUNT=sergantche.testnet
 
 # create subaccount
-# near delete $ID sergantche.testnet # uncomment to delete old account
-near create-account $ID --masterAccount=sergantche.testnet --initial-balance 50
+# near delete $CONTRACT $MASTER_ACCOUNT # uncomment to delete old account
+near create-account $CONTRACT --masterAccount=$MASTER_ACCOUNT --initial-balance 50
 
 # deploy contract
-near deploy --wasmFile contract/target/wasm32-unknown-unknown/release/near_backend.wasm --accountId $ID
-near call $ID new --accountId $ID
+near deploy --wasmFile contract/target/wasm32-unknown-unknown/release/near_backend.wasm --accountId $CONTRACT
+near call $CONTRACT new --accountId $CONTRACT
 
 # copy credentials for later deploy
-cp ~/.near-credentials/testnet/$ID.json ./creds
+cp ~/.near-credentials/testnet/$CONTRACT.json ./creds
